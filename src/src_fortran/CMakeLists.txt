@@ -1,6 +1,3 @@
-# SPHERICAL HARMONICS
-# to modify
-
 target_sources(s2hat_std PUBLIC
                 "s2hat_defs.f90"
                 "s2hat_types_internal.F90"
