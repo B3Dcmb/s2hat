@@ -9,7 +9,7 @@
 # General configuration
 # ----------------------------------------------------------------------------------------#
 
-cmake_minimum_required(VERSION 3.24...3.25)
+cmake_minimum_required(VERSION 3.22...3.25)
 enable_language( Fortran )
 
 # Project name and a few useful settings
@@ -22,7 +22,7 @@ project(S2HAT
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(CMAKE_Fortran_STANDARD 90)
+set(CMAKE_Fortran_STANDARD 77)
 set(CMAKE_Fortran_STANDARD_REQUIRED ON)
 
 # We are building libraries that will eventually be linked into shared modules.
@@ -38,19 +38,16 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 # Search for MPI 
 find_package(MPI REQUIRED)
-find_package(MPI COMPONENTS C Fortran REQUIRED)
-
-
+find_package(MPI COMPONENTS Fortran REQUIRED)
 
 # Search for FFTW
 find_package(FFTW REQUIRED)
 
 # Search for HEALPIX
-# find_package(HEALPIX REQUIRED)
+find_package(HEALPIX)
 
 # ----------------------------------------------------------------------------------------#
 # Subdirectories
 # ----------------------------------------------------------------------------------------#
 
 add_subdirectory(src)
-# add_subdirectory(examples)

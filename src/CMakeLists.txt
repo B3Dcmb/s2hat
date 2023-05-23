@@ -66,7 +66,7 @@ target_include_directories(s2hat_std PUBLIC
 # target_compile_options(s2hat_std PRIVATE -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch -Wall -Wextra -Wpedantic)
 target_compile_options(s2hat_std PUBLIC -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPIC -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch)
 
-# add_compile_options(${MPI_Fortran_COMPILE_FLAGS})
+add_compile_options(${MPI_Fortran_COMPILE_FLAGS})
 
 # target_compile_options(s2hat_std PRIVATE -O3)
             
@@ -77,11 +77,6 @@ target_compile_options(s2hat_std PUBLIC -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPI
 # MPI
 # set_target_properties(s2hat_std PROPERTIES COMPILE_FLAGS "${MPI_Fortran_COMPILE_FLAGS}")
 # set_target_properties(s2hat_std PROPERTIES LINK_FLAGS "${MPI_Fortran_LINK_FLAGS}")
-
-add_definitions(${MPI_Fortran_COMPILE_FLAGS})
-include_directories(${MPI_Fortran_INCLUDE_PATH})
-link_directories(${MPI_Fortran_LIBRARIES})
-target_link_libraries(s2hat_std PUBLIC ${MPI_Fortran_LIBRARIES})
 
 target_link_libraries(s2hat_std PUBLIC MPI::MPI_C)
 target_link_libraries(s2hat_std PUBLIC MPI::MPI_Fortran)
@@ -96,15 +91,23 @@ if (FFTW_FOUND)
     #    if(FFTW_DOUBLE_THREADS_LIB_FOUND)
     #        target_compile_definitions(s2hat_std PRIVATE HAVE_FFTW_THREADS=1)
     #    endif(FFTW_DOUBLE_THREADS_LIB_FOUND)
-    target_compile_definitions(s2hat_std PUBLIC -DFFTW3_C2R)
+    target_compile_options(s2hat_std PUBLIC -DFFTW3_C2R)
 endif (FFTW_FOUND)
 
+if (HEALPIX_FOUND)
+    #target_compile_definitions(s2hat_std PRIVATE HAVE_HEALPIX=1)
+    target_include_directories(s2hat_std PUBLIC "${HEALPIX_INCLUDE_DIRS}")
+    target_link_libraries(s2hat_std PUBLIC "${HEALPIX_LIBRARIES}")
+    target_compile_options(s2hat_std PUBLIC -DHEALPIX_fft)
+endif (HEALPIX_FOUND)
+
 # if (HEALPIX_FOUND)
-#     #target_compile_definitions(s2hat_std PRIVATE HAVE_HEALPIX=1)
-#     target_include_directories(s2hat_std PUBLIC "${HEALPIX_INCLUDE_DIRS}")
-#     target_link_libraries(s2hat_std PUBLIC "${HEALPIX_LIBRARIES}")
-#     target_compile_options(s2hat_std PUBLIC -DHEALPIX_fft)
-# endif (HEALPIX_FOUND)
+# set(HEADER_FILES ${HEALPIXROOT}"/include/chealpix.h")
+# target_include_directories(s2hat_std PRIVATE $ENV{HEALPIXROOT}/include)
+# target_link_libraries(s2hat_std PRIVATE $ENV{HEALPIXROOT}/lib/libchealpix.a)
+# target_compile_definitions(s2hat_std PRIVATE "-DHEALPIXDATA=${HEALPIXROOT}share/healpix/ -ls2hat_std")
+# endif ()
+
 
 # ----------------------------------------------------------------------------------------#
 # compile options
@@ -147,7 +150,7 @@ endif (FFTW_FOUND)
 
 include(GNUInstallDirs)
 
-set(CMAKE_INSTALL_LIBDIR "lib")
+set(CMAKE_INSTALL_LIBDIR "${CMAKE_CURRENT_LIST_DIR}/../lib")
 # set(CMAKE_INSTALL_FULL_LIBDIR /lib)
 
 # install the library
