@@ -10,6 +10,10 @@ set(CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/../include")
 # target_include_directories(s2hat_std PUBLIC Fortran_MODULE_DIRECTORY)
 
 
+option(BUILD_with_FFTW "Build with FFTW" ON)
+option(BUILD_with_HEALPIX "Build with HEALPIX" OFF)
+
+
 # add_library(s2hat_std STATIC 
 #             "${CMAKE_CURRENT_LIST_DIR}/../include/s2hat.h" 
 #             "${CMAKE_CURRENT_LIST_DIR}/../include/s2hat_types.h"
@@ -82,9 +86,10 @@ target_link_libraries(s2hat_std PUBLIC MPI::MPI_C)
 target_link_libraries(s2hat_std PUBLIC MPI::MPI_Fortran)
 # target_link_libraries(s2hat_std PUBLIC ${MPI_Fortran_LIBRARIES})
 
+
 # FFTW
 
-if (FFTW_FOUND)
+if (FFTW_FOUND AND BUILD_with_FFTW)
     #target_compile_definitions(s2hat_std PRIVATE HAVE_FFTW=1)
     target_include_directories(s2hat_std PUBLIC "${FFTW_INCLUDE_DIRS}")
     target_link_libraries(s2hat_std PUBLIC "${FFTW_LIBRARIES}")
@@ -94,7 +99,7 @@ if (FFTW_FOUND)
     target_compile_options(s2hat_std PUBLIC -DFFTW3_C2R)
 endif (FFTW_FOUND)
 
-if (HEALPIX_FOUND)
+if (HEALPIX_FOUND AND BUILD_with_HEALPIX)
     #target_compile_definitions(s2hat_std PRIVATE HAVE_HEALPIX=1)
     target_include_directories(s2hat_std PUBLIC "${HEALPIX_INCLUDE_DIRS}")
     target_link_libraries(s2hat_std PUBLIC "${HEALPIX_LIBRARIES}")

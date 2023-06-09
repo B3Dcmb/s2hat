@@ -34,3 +34,8 @@ cc mini_test.c -fopenmp -O3 -DFFTW3_C2R -g -dynamic -lgfortran -L$S2HATROOT_2/li
 ftn  s2hat_example.f90 -Wmissing-include-dirs -DFFTW3_HC2R  -L$S2HATROOT_3/lib -I$S2HATROOT_3/include -ls2hat_std -o s2hat_example_f3
 cc s2hat_example.c -fopenmp -O3 -DFFTW3_C2R -g -dynamic -lgfortran -L$S2HATROOT_3/lib -I$S2HATROOT_3/include -ls2hat_std  -o s2hat_example_c3
 cc mini_test.c -fopenmp -O3 -DFFTW3_C2R -g -dynamic -lgfortran -L$S2HATROOT_3/lib -I$S2HATROOT_3/include -ls2hat_std  -o mini_test_c3
+
+
+S2HATROOT_4=/global/homes/m/mag/software/Github_softwares/s2hat
+ftn mini_test.c -L$S2HATROOT_4/lib -I$S2HATROOT_4/include -ls2hat_std -fopenmp -O3 -fPIC -Dx86_64 -DMAXCHK=1500 -DFFTW3_C2R -std=gnu99 -MD -MT -g -dynamic  -o mini_test
+ftn s2hat_example.c -fopenmp -O3 -DFFTW3_C2R -g -dynamic -L$S2HATROOT_4/lib -I$S2HATROOT_4/include -ls2hat_std  -o s2hat_example_c3
