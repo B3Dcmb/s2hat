@@ -9,8 +9,10 @@
 # General configuration
 # ----------------------------------------------------------------------------------------#
 
-cmake_minimum_required(VERSION 3.22...3.25)
+cmake_minimum_required(VERSION 3.22...3.26)
 enable_language( Fortran )
+
+set(CMAKE_OSX_DEPLOYMENT_TARGET "13.1" CACHE STRING "Minimum OS X deployment version" FORCE)
 
 # Project name and a few useful settings
 project(S2HAT
@@ -50,4 +52,11 @@ find_package(HEALPIX)
 # Subdirectories
 # ----------------------------------------------------------------------------------------#
 
+
 add_subdirectory(src)
+
+option(BUILD_TESTS "Build the tests" OFF)
+
+if (BUILD_TESTS)
+    add_subdirectory(examples)
+endif ()

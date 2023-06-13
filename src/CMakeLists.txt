@@ -21,6 +21,7 @@ option(BUILD_with_HEALPIX "Build with HEALPIX" OFF)
             # "${CMAKE_CURRENT_LIST_DIR}/../include/s2hat_defs.h")
 
 add_library(s2hat_std STATIC)
+# set_property(TARGET s2hat_std PROPERTY LINKER_LANGUAGE Fortran)
 
 # ----------------------------------------------------------------------------------------#
 # sources files
@@ -68,8 +69,10 @@ target_include_directories(s2hat_std PUBLIC
 # ----------------------------------------------------------------------------------------#
 
 # target_compile_options(s2hat_std PRIVATE -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch -Wall -Wextra -Wpedantic)
-target_compile_options(s2hat_std PUBLIC -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPIC -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch)
+# target_compile_options(s2hat_std PUBLIC -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPIC -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch)
+# target_compile_options(s2hat_std PUBLIC -Dx86_64 -DMAXCHK=1500 -O3 -fPIC -fno-second-underscore -ffree-line-length-none -fallow-argument-mismatch)
 
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPIC -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch")
 add_compile_options(${MPI_Fortran_COMPILE_FLAGS})
 
 # target_compile_options(s2hat_std PRIVATE -O3)
@@ -97,14 +100,14 @@ if (FFTW_FOUND AND BUILD_with_FFTW)
     #        target_compile_definitions(s2hat_std PRIVATE HAVE_FFTW_THREADS=1)
     #    endif(FFTW_DOUBLE_THREADS_LIB_FOUND)
     target_compile_options(s2hat_std PUBLIC -DFFTW3_C2R)
-endif (FFTW_FOUND)
+endif (FFTW_FOUND AND BUILD_with_FFTW)
 
 if (HEALPIX_FOUND AND BUILD_with_HEALPIX)
     #target_compile_definitions(s2hat_std PRIVATE HAVE_HEALPIX=1)
     target_include_directories(s2hat_std PUBLIC "${HEALPIX_INCLUDE_DIRS}")
     target_link_libraries(s2hat_std PUBLIC "${HEALPIX_LIBRARIES}")
     target_compile_options(s2hat_std PUBLIC -DHEALPIX_fft)
-endif (HEALPIX_FOUND)
+endif (HEALPIX_FOUND AND BUILD_with_HEALPIX)
 
 # if (HEALPIX_FOUND)
 # set(HEADER_FILES ${HEALPIXROOT}"/include/chealpix.h")

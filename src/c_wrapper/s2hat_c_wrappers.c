@@ -1,8 +1,7 @@
-
 #include "stdlib.h"
 #include "stdio.h"
 #include "math.h"
-#include "malloc.h"
+// #include "malloc.h"
 #include "sys/types.h"
 #include "mpi.h"
 

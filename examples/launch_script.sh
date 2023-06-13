@@ -1,5 +1,6 @@
-S2HATROOT=/global/homes/m/mag/software/s2hat_cmake_fftw/s2hat
+# S2HATROOT=/global/homes/m/mag/software/s2hat_cmake_fftw/s2hat
 # HEALPIXROOT=/global/homes/m/mag/software/Healpix_3.82
+S2HATROOT=/Users/mag/Documents/PHD1Y/Space_Work/Inference_Sampling/s2hat
 
 # cc s2hat_example.c -fopenmp -O3 -DHEALPIX_fft -g -lgfortran -L$S2HATROOT/lib -I$S2HATROOT/include -ls2hat_std  -o s2hat_example
 cc s2hat_example.c -O3 -DFFTW3_C2R -g -lgfortran -L$S2HATROOT/lib -I$S2HATROOT/include -ls2hat_std  -o s2hat_example
@@ -39,3 +40,10 @@ cc mini_test.c -fopenmp -O3 -DFFTW3_C2R -g -dynamic -lgfortran -L$S2HATROOT_3/li
 S2HATROOT_4=/global/homes/m/mag/software/Github_softwares/s2hat
 ftn mini_test.c -L$S2HATROOT_4/lib -I$S2HATROOT_4/include -ls2hat_std -fopenmp -O3 -fPIC -Dx86_64 -DMAXCHK=1500 -DFFTW3_C2R -std=gnu99 -MD -MT -g -dynamic  -o mini_test
 ftn s2hat_example.c -fopenmp -O3 -DFFTW3_C2R -g -dynamic -L$S2HATROOT_4/lib -I$S2HATROOT_4/include -ls2hat_std  -o s2hat_example_c3
+
+cc examples/mini_test.c -O3 -DFFTW3_C2R -L$S2HATROOT/lib -I$S2HATROOT/include -ls2hat_std  -o examples/mini_test
+ftn examples/s2hat_example.f90 -Wmissing-include-dirs -DFFTW3_HC2R  -L$S2HATROOT/lib -I$S2HATROOT/include -ls2hat_std -o examples/s2hat_example_f3
+
+
+
+mpifort examples/s2hat_example.f90 -Wmissing-include-dirs -DFFTW3_HC2R -L/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/lib  -lSystem  -L$S2HATROOT/lib -I$S2HATROOT/include -ls2hat_std -o examples/s2hat_example_f3
