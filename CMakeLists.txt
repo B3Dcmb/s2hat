@@ -12,7 +12,7 @@
 cmake_minimum_required(VERSION 3.22...3.26)
 enable_language( Fortran )
 
-set(CMAKE_OSX_DEPLOYMENT_TARGET "13.1" CACHE STRING "Minimum OS X deployment version" FORCE)
+# set(CMAKE_OSX_DEPLOYMENT_TARGET "13.1" CACHE STRING "Minimum OS X deployment version")
 
 # Project name and a few useful settings
 project(S2HAT
@@ -31,6 +31,27 @@ set(CMAKE_Fortran_STANDARD_REQUIRED ON)
 # All code should be built with PIC.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+# ----- RPATH -----
+
+# use, i.e. don't skip the full RPATH for the build tree
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# the RPATH to be used when installing, but only if it's not a system directory
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if ("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif ("${isSystemDir}" STREQUAL "-1")
+
 # Auxiliary files
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
@@ -43,7 +64,8 @@ find_package(MPI REQUIRED)
 find_package(MPI COMPONENTS Fortran REQUIRED)
 
 # Search for FFTW
-find_package(FFTW REQUIRED)
+# find_package(FFTW REQUIRED)
+find_package(FFTW REQUIRED DOUBLE_LIB)
 
 # Search for HEALPIX
 find_package(HEALPIX)

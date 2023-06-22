@@ -44,7 +44,7 @@ endif (HEALPIX_FOUND AND BUILD_with_HEALPIX)
 
 # libraries
 target_link_libraries(test_run PRIVATE s2hat_std MPI::MPI_C)
-target_link_libraries(test_run PRIVATE s2hat_std MPI::MPI_Fortran)
+target_link_libraries(test_run PRIVATE MPI::MPI_Fortran)
 
 
 install(TARGETS test_run 

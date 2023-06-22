@@ -20,7 +20,8 @@ option(BUILD_with_HEALPIX "Build with HEALPIX" OFF)
 #             "${CMAKE_CURRENT_LIST_DIR}/../include/s2hat_f2c.h"
             # "${CMAKE_CURRENT_LIST_DIR}/../include/s2hat_defs.h")
 
-add_library(s2hat_std STATIC)
+# add_library(s2hat_std STATIC)
+add_library(s2hat_std SHARED)
 # set_property(TARGET s2hat_std PROPERTY LINKER_LANGUAGE Fortran)
 
 # ----------------------------------------------------------------------------------------#
@@ -72,8 +73,17 @@ target_include_directories(s2hat_std PUBLIC
 # target_compile_options(s2hat_std PUBLIC -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPIC -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch)
 # target_compile_options(s2hat_std PUBLIC -Dx86_64 -DMAXCHK=1500 -O3 -fPIC -fno-second-underscore -ffree-line-length-none -fallow-argument-mismatch)
 
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPIC -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch")
+# set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Dx86_64 -DMAXCHK=1500 -O3 -fopenmp -fPIC -fno-second-underscore -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DMAXCHK=1500 -O3 -ffixed-line-length-none -ffree-line-length-none -fallow-argument-mismatch")
 add_compile_options(${MPI_Fortran_COMPILE_FLAGS})
+
+option(BUILD_x86_64 "Build with x86_64, like with Rosetta on Apple Silicon M1" OFF)
+
+if (BUILD_x86_64)
+    set(CMAKE_APPLE_SILICON_PROCESSOR x86_64)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Dx86_64")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dx86_64")
+endif ()
 
 # target_compile_options(s2hat_std PRIVATE -O3)
             
@@ -92,14 +102,25 @@ target_link_libraries(s2hat_std PUBLIC MPI::MPI_Fortran)
 
 # FFTW
 
+# if (FFTW_FOUND AND BUILD_with_FFTW)
+#     #target_compile_definitions(s2hat_std PRIVATE HAVE_FFTW=1)
+#     target_include_directories(s2hat_std PUBLIC "${FFTW_INCLUDE_DIRS}")
+#     target_link_libraries(s2hat_std PUBLIC "${FFTW_LIBRARIES}")
+#     #    if(FFTW_DOUBLE_THREADS_LIB_FOUND)
+#     #        target_compile_definitions(s2hat_std PRIVATE HAVE_FFTW_THREADS=1)
+#     #    endif(FFTW_DOUBLE_THREADS_LIB_FOUND)
+#     target_compile_options(s2hat_std PUBLIC -DFFTW3_C2R)
+# endif (FFTW_FOUND AND BUILD_with_FFTW)
+
 if (FFTW_FOUND AND BUILD_with_FFTW)
     #target_compile_definitions(s2hat_std PRIVATE HAVE_FFTW=1)
-    target_include_directories(s2hat_std PUBLIC "${FFTW_INCLUDE_DIRS}")
-    target_link_libraries(s2hat_std PUBLIC "${FFTW_LIBRARIES}")
+    # target_include_directories(s2hat_std PRIVATE "${FFTW_INCLUDE_DIRS}")
+    # target_link_libraries(s2hat_std PRIVATE "${FFTW_LIBRARIES}")
     #    if(FFTW_DOUBLE_THREADS_LIB_FOUND)
     #        target_compile_definitions(s2hat_std PRIVATE HAVE_FFTW_THREADS=1)
     #    endif(FFTW_DOUBLE_THREADS_LIB_FOUND)
-    target_compile_options(s2hat_std PUBLIC -DFFTW3_C2R)
+    target_link_libraries(s2hat_std PUBLIC FFTW::Double)
+    target_compile_options(s2hat_std PRIVATE -DFFTW3_C2R)
 endif (FFTW_FOUND AND BUILD_with_FFTW)
 
 if (HEALPIX_FOUND AND BUILD_with_HEALPIX)
@@ -158,7 +179,8 @@ endif (HEALPIX_FOUND AND BUILD_with_HEALPIX)
 
 include(GNUInstallDirs)
 
-set(CMAKE_INSTALL_LIBDIR "${CMAKE_CURRENT_LIST_DIR}/../lib")
+# set(CMAKE_INSTALL_LIBDIR "${CMAKE_CURRENT_LIST_DIR}/../lib")
+set(CMAKE_INSTALL_LIBDIR "${PROJECT_SOURCE_DIR}/lib")
 # set(CMAKE_INSTALL_FULL_LIBDIR /lib)
 
 # install the library

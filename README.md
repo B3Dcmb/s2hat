@@ -17,10 +17,13 @@ Then, one of the two following :
 
 Ensure these libraries are available on your system. You may as weel explicit them in a file `.bash_profile_s2hat` to load before using cmake, where you explicitely give `HEALPIX_DIR`, the path to find the healpix libraries and headers (especially for the Fortran one) if you chose Healpix for the fourier transform calculations.
 
+Note :
+For Mac M1, you may install FFTW using [Homebrew](https://brew.sh/)
+
 To build the library and install it at a given location (prefix), execute the commands:
 
 ```
-cmake -S . -B build --install-prefix <path>
+cmake -S . -B build --install-prefix <path> -DBUILD_x86_64=ON
 cmake --build build
 cmake --install build
 ```
