@@ -79,3 +79,31 @@ void s2hat_map2alm_spin( s2hat_pixeltype, s2hat_scandef, s2hat_int4, s2hat_int4,
 /* plm calculation */
 
 void plm_mvalues_gen( s2hat_pixeltype, s2hat_scandef, s2hat_int4, s2hat_int4, s2hat_int4, s2hat_int4, s2hat_int4*, s2hat_int4, s2hat_int8, s2hat_flt8*);
+
+/* Iteration routines */
+
+
+s2hat_int4 s2hat_map2alm_gausjac( s2hat_int4 plms, s2hat_pixeltype cpixelization, s2hat_scandef cscan, s2hat_int4 nlmax, s2hat_int4 nmmax, s2hat_int4 nmvals, s2hat_int4 *mvals, s2hat_int4 nmaps,
+				  s2hat_int4 nstokes, s2hat_int4 first_ring, s2hat_int4 last_ring, s2hat_flt8 *local_w8ring, s2hat_int4 map_size, s2hat_flt8 *local_map, s2hat_int4 lda,
+				  s2hat_dcomplex *local_alm, s2hat_int4 nplm, s2hat_flt8 *plm, s2hat_int4 nprocs, s2hat_int4 myrank, s2hat_int4 niter, s2hat_flt8 epsilon,
+				  s2hat_int4 *iter_out, s2hat_flt8 *eps_out, MPI_Comm mpi_comm);
+
+s2hat_int4 s2hat_map2alm_cg( s2hat_int4 plms, s2hat_pixeltype cpixelization, s2hat_scandef cscan, s2hat_int4 nlmax, s2hat_int4 nmmax, s2hat_int4 nmvals, s2hat_int4 *mvals, s2hat_int4 nmaps,
+			     s2hat_int4 nstokes, s2hat_int4 first_ring, s2hat_int4 last_ring, s2hat_flt8 *local_w8ring, s2hat_int4 map_size, s2hat_flt8 *local_map, s2hat_int4 lda,
+			     s2hat_dcomplex *local_alm, s2hat_int4 nplm, s2hat_flt8 *plm, s2hat_int4 nprocs, s2hat_int4 myrank, s2hat_int4 niter, s2hat_flt8 epsilon,
+			     s2hat_int4 *iter_out, s2hat_flt8 *eps_out, MPI_Comm mpi_comm);
+
+s2hat_int4 s2hat_map2alm_spin_cg( s2hat_pixeltype cpixelization, s2hat_scandef cscan, s2hat_int4 spin, s2hat_int4 nlmax, s2hat_int4 nmmax, s2hat_int4 nmvals, s2hat_int4 *mvals, s2hat_int4 nmaps,
+			          s2hat_int4 first_ring, s2hat_int4 last_ring, s2hat_flt8 *local_w8ring, s2hat_int4 map_size, s2hat_flt8 *local_map, s2hat_int4 lda, s2hat_dcomplex *local_alm,
+				  s2hat_int4 nprocs, s2hat_int4 myrank, s2hat_int4 niter, s2hat_flt8 epsilon, s2hat_int4 *iter_out, s2hat_flt8 *eps_out, MPI_Comm mpi_comm);
+
+s2hat_int4 s2hat_map2alm_cg_zero( s2hat_int4 plms, s2hat_pixeltype cpixelization, s2hat_scandef cscan, s2hat_int4 nlmax, s2hat_int4 nmmax, s2hat_int4 nmvals, s2hat_int4 *mvals, s2hat_int4 nmaps,
+			          s2hat_int4 nstokes, s2hat_int4 first_ring, s2hat_int4 last_ring, s2hat_flt8 *local_w8ring, s2hat_int4 map_size, s2hat_flt8 *local_map, s2hat_int4 lda,
+			          s2hat_dcomplex *local_alm, s2hat_int4 nplm, s2hat_flt8 *plm, s2hat_int4 nprocs, s2hat_int4 myrank, s2hat_int4 niter, s2hat_flt8 epsilon, s2hat_int4 *iter_out,
+			          s2hat_flt8 *eps_out, MPI_Comm mpi_comm);
+
+s2hat_flt8 hres_norm( s2hat_int4 nmaps, s2hat_int4 nstokes, s2hat_int4 nlmax, s2hat_int4 nmvals, s2hat_int4 *mvals, s2hat_int4 lda, s2hat_dcomplex *local_alm, s2hat_flt8 *norm_result, MPI_Comm mpi_comm);
+s2hat_flt8 mres_norm( s2hat_int4 length, s2hat_flt8 *vect, s2hat_flt8 *norm_result, MPI_Comm mpi_comm);
+s2hat_flt8 mres_weighted_norm( s2hat_pixeltype cpixelization, s2hat_scandef cscan, s2hat_int4 nstokes, s2hat_int4 first_ring, s2hat_int4 last_ring, s2hat_flt8 *local_w8ring,
+			       s2hat_int4 map_size, s2hat_flt8 *local_map, s2hat_flt8 *norm_result, MPI_Comm mpi_comm);
+s2hat_int4 combine_alm_sets( s2hat_int4 nmaps, s2hat_int4 nstokes, s2hat_int4 nlmax, s2hat_int4 nmvals, s2hat_int4 *mvals, s2hat_int4 lda, s2hat_flt8 alpha, s2hat_dcomplex *local_alm1, s2hat_flt8 beta, s2hat_dcomplex *local_alm2, MPI_Comm mpi_comm);

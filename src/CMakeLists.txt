@@ -121,6 +121,7 @@ if (FFTW_FOUND AND BUILD_with_FFTW)
     #    endif(FFTW_DOUBLE_THREADS_LIB_FOUND)
     target_link_libraries(s2hat_std PUBLIC FFTW::Double)
     target_compile_options(s2hat_std PRIVATE -DFFTW3_C2R)
+    # target_compile_options(s2hat_std PRIVATE -DFFTW3_HC2R)
 endif (FFTW_FOUND AND BUILD_with_FFTW)
 
 if (HEALPIX_FOUND AND BUILD_with_HEALPIX)
